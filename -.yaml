@@ -1,0 +1,316 @@
+openapi: 3.0.0
+info:
+  title: Lending Website frontend API spec.
+  description: This is a new CW Web site API 
+  contact:
+    name: Website API documentation
+    url: 'https://intranet.cashwagon.com/display/WEB/Application'
+  version: 1.0.0
+paths:
+  '/api/site/applications':
+    post:
+      tags:
+        - Applications
+      summary: An attempt to start an application of a new client.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Step0'
+      responses:
+        201:
+          description: New application started
+          headers: 
+            X-Application-Id:
+              schema: 
+                type: string
+                example: '57a97f42-cb3c-473b-b12e-1f41c83f3312'
+        200:
+          description: OTP for repeat loan is sent
+          headers:
+            X-Application-Id:
+              schema: 
+                type: string
+                example: '57a97f42-cb3c-473b-b12e-1f41c83f3312'
+        400: 
+          description: 'Invalid Request' 
+  '/api/site/applications/error_codes':
+    get:
+      tags:
+        - Errors
+      summary: ''
+      description: ''
+      responses:
+        '200':
+          description: 'Загрузка словаря кодов ошибок валидации'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorCodeList"
+
+
+#  #TODO: разобраться с этой ручкой:
+#  # почему оно на сайте а не в словарях?
+#  # как передаётся страна и локаль? 
+#  '/api/site/dictionaries/{key}':
+#    get:
+#      tags:
+#        - Dictionaries
+#      summary: ''
+#      description: ''
+#      parameters:
+#        - name: key
+#          in: path
+#          description: ''
+#          required: true
+#          schema:
+#            type: string
+#      responses:
+#        '200':
+#          description: '#show | Значение словаря по ключу'
+#          content:
+#            application/json:
+#              schema:
+#                description: ''
+#                type: object
+#                properties: {}
+#              examples:
+#                response:
+#                  value:
+#                    data:
+#                      - value: 1
+#                        label: SSS
+#                      - value: 2
+#                        label: TIN
+#
+#  '/api/site/applications/images':
+#    post:
+#      tags:
+#        - Images
+#      summary: ''
+#      description: 'Загрузка изображения'
+#      parameters:
+#        - name: application_id
+#          in: cookie
+#          description: ''
+#          required: true
+#          schema:
+#            type: string
+#            example: '0ae187fd-bc85-4837-b139-2642a08cf7b7'
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              description: ''
+#              type: object
+#              properties:
+#                image:
+#                  type: object
+#                  required: [type, data]
+#                  properties:
+#                    type:
+#                      type: string
+#                      enum: 
+#                        - selfie
+#                        - document
+#                    data:
+#                      description: 'image file body'
+#                      type: string
+#                      format: base64
+#                    captured_at:
+#                      type: integer
+#                      example: 1547456236
+#                      description: 'дата съемки в ms'
+#                    file_name: 
+#                        type: string
+#                        description: название файла
+#      responses:
+#        '200':
+#          description: 'Изображение успешно загружено'
+#          content:
+#            application/json:
+#              schema:
+#                type: object
+#                properties:
+#                  image:
+#                    type: object
+#                    properties:
+#                      image_url:
+#                        type: string
+#                        example: https://cashwagon-middle.s3.ap-southeast-1.amazonaws.com/uploads/e22150f2-a21c-4e1f-b461-7284ff87b321.png
+
+  '/ph/api/site/applications/{id}':
+    get:
+      tags:
+        - Applications
+      summary: ''
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'STEP 3 | #show | Получение заявки по id'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties: {}
+              examples:
+                response:
+                  value:
+                    application:
+                      first_name: null
+                      last_name: null
+                      phone: null
+      deprecated: false
+      security: []
+    put:
+      tags:
+        - Applications
+      summary: ''
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'STEP 1 | #update | Создание и обновление заявки'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties: {}
+              examples:
+                response:
+                  value:
+                    application:
+                      first_name: null
+                      last_name: null
+                      phone: 1-951-032-6825
+      deprecated: false
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: (String) - application uuid
+                application:
+                  type: object
+                  properties:
+                    full_name:
+                      type: string
+                      description: (String) - ФИО
+                    phone:
+                      type: string
+                      description: (String) - phone
+                  required:
+                    - full_name
+  '/api/site/applications/{id}/confirm':
+    post:
+      tags:
+        - Applications
+      summary: ''
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'STEP 2 | #confirm | Подтверждение заявки'
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties: {}
+              examples:
+                response:
+                  value:
+                    application: {}
+      deprecated: false
+      security: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  description: (String) - application uuid
+                  type: string
+tags:
+  - name: Applications
+    description: ''
+#  - name: Images
+#    description: ''
+  - name: Errors
+    description: ''
+#  - name: Dictionaries
+#    description: ''
+servers:
+  - url: 'https://dev-website-middle.cashwagon.com'
+components:
+  schemas:
+    ErrorCodeList:
+      description: ''
+      type: object
+      properties:
+        error_codes:
+          type: array
+          items:
+            type: string
+            example: 'document_number_invalid'
+    Step0:
+      type: object
+      properties:
+        mobile_phone:
+          type: string
+          example: "+79291234567"
+          description: Customer's mobile phone number in E.164 format
+        full_name:
+          type: string
+          example: "John Doe"
+          description: Customer's full name
+        term:
+          type: integer
+          example: 10
+          description: Loan tern (days)
+        amount:
+          type: integer
+          example: 15000
+          description: Loan amount (local currency)
+        utm_parameters:
+          example: 
+            source: facebook
+            medium: cpl
+            term: carousel01
+            content: kh_family_cash_entertaintment
+            campaign: cpl_campaigns_flf
+          type: object
+          additionalProperties: 
+            type: string
+            description: Different UMT parameters without "utm_" preffix
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
